@@ -1,5 +1,4 @@
 <?php
-// Adatbázis kapcsolat - Figyelj, hogy a keresőnél használt adatbázis nevet írd ide (pl. katalogus_db)!
 $host = "localhost"; $user = "root"; $pass = ""; $db = "katalogus_db";
 $conn = new mysqli($host, $user, $pass, $db);
 $conn->set_charset("utf8mb4");
@@ -11,7 +10,6 @@ if (isset($_POST['mentes'])) {
     $tipus = $_POST['tipus'];
     $ritkasag = $_POST['ritkasag'];
     
-    // Mappa ellenőrzése (kepek vagy uploads - használd azt, ami az index.php-ban van!)
     $mappa = "uploads/"; 
     if (!file_exists($mappa)) { mkdir($mappa, 0777, true); }
 
@@ -19,7 +17,6 @@ if (isset($_POST['mentes'])) {
     $cel = $mappa . $fajlNev;
 
     if (move_uploaded_file($_FILES['kep']['tmp_name'], $cel)) {
-        // Bővített INSERT az új oszlopokkal
         $stmt = $conn->prepare("INSERT INTO termekek (nev, ar, kep_utvonal, leiras, tipus, ritkasag) VALUES (?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sissss", $nev, $ar, $fajlNev, $leiras, $tipus, $ritkasag);
         $stmt->execute();
@@ -28,7 +25,6 @@ if (isset($_POST['mentes'])) {
 
 $termekek = $conn->query("SELECT * FROM termekek ORDER BY id DESC");
 
-// Szorzó függvény a megjelenítéshez
 function arKalkulator($alapAr, $ritkasag) {
     switch($ritkasag) {
         case 'A': return $alapAr * 15;
@@ -45,7 +41,7 @@ function arKalkulator($alapAr, $ritkasag) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feltöltés - Gyűjtői Katalógus</title>
-    <link rel="stylesheet" href="main.css"> <!-- Ide jöhet a korábbi stílusod -->
+    <link rel="stylesheet" href="main.css"> 
     <style>
         .form-container { max-width: 500px; margin: 20px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
         .form-container input, .form-container select, .form-container textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
@@ -82,17 +78,14 @@ function arKalkulator($alapAr, $ritkasag) {
         .filter-panel label { display: block; margin-top: 10px; font-weight: bold; }
         .filter-panel select, .filter-panel input { width: 100%; margin-top: 5px; }
 
-        /* Kártya Grid */
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
         
-        /* Kártya Stílusok */
         .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; transition: 0.3s; }
         .card:hover { transform: translateY(-8px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
         .card img { width: 100%; height: 220px; object-fit: cover; border-bottom: 1px solid #eee; }
         .card-content { padding: 20px; }
         .card h3 { margin-top: 0; color: var(--primary); }
         
-        /* Ritkaság Jelvények és Színek */
         .rarity-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: white; padding: 4px 10px; border-radius: 4px; font-weight: bold; z-index: 2; }
         .tier-A { border: 3px solid #ffd700; } /* Arany */
         .tier-B { border: 3px solid #c0c0c0; } /* Ezüst */
