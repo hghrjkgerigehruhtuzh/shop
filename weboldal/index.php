@@ -1,5 +1,5 @@
 <?php
-// 1. ADATBÁZIS KAPCSOLÓDÁS
+
 $host = "localhost";
 $user = "root";
 $pass = "";
@@ -7,13 +7,13 @@ $db   = "katalogus_db";
 
 $conn = new mysqli($host, $user, $pass, $db);
 
-// Kapcsolat ellenőrzése
+
 if ($conn->connect_error) {
     die("Kapcsolódási hiba: " . $conn->connect_error);
 }
 $conn->set_charset("utf8mb4");
 
-// 2. RITKASÁG SZORZÓ FÜGGVÉNY
+
 function arKalkulator($alapAr, $ritkasag) {
     switch($ritkasag) {
         case 'A': return $alapAr * 15;
@@ -33,7 +33,7 @@ function arKalkulator($alapAr, $ritkasag) {
         :root { --primary: #2c3e50; --accent: #3498db; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; }
         
-        /* Navigáció */
+
         .navbar { background: var(--primary); padding: 1rem; margin-bottom: 30px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
         .nav-links { list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; }
@@ -41,7 +41,7 @@ function arKalkulator($alapAr, $ritkasag) {
         .logo { color: white; text-decoration: none; font-size: 1.5rem; font-weight: bold; }
         .logo span { color: var(--accent); }
 
-        /* Kereső és Szűrő Szekció */
+     
         .search-section { position: relative; text-align: center; margin-bottom: 30px; }
         #searchBar { padding: 12px; width: 50%; border-radius: 5px; border: 1px solid #ccc; font-size: 16px; }
         #filterBtn { padding: 12px 20px; cursor: pointer; background: var(--accent); color: white; border: none; border-radius: 5px; font-weight: bold; }
@@ -56,17 +56,17 @@ function arKalkulator($alapAr, $ritkasag) {
         .filter-panel label { display: block; margin-top: 10px; font-weight: bold; }
         .filter-panel select, .filter-panel input { width: 100%; margin-top: 5px; }
 
-        /* Kártya Grid */
+     
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
         
-        /* Kártya Stílusok */
+       
         .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; transition: 0.3s; }
         .card:hover { transform: translateY(-8px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
         .card img { width: 100%; height: 220px; object-fit: cover; border-bottom: 1px solid #eee; }
         .card-content { padding: 20px; }
         .card h3 { margin-top: 0; color: var(--primary); }
         
-        /* Ritkaság Jelvények és Színek */
+       
         .rarity-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: white; padding: 4px 10px; border-radius: 4px; font-weight: bold; z-index: 2; }
         .tier-A { border: 3px solid #ffd700; } /* Arany */
         .tier-B { border: 3px solid #c0c0c0; } /* Ezüst */
@@ -114,13 +114,13 @@ function arKalkulator($alapAr, $ritkasag) {
 
 <div class="grid" id="katalogus">
     <?php
-    // LEKÉRDEZÉS FUTTATÁSA
+
     $sql = "SELECT * FROM termekek ORDER BY datum DESC";
     $result = $conn->query($sql);
 
     if ($result && $result->num_rows > 0):
         while($row = $result->fetch_assoc()): 
-            // Végleges ár kiszámítása a ritkaság alapján
+         
             $veglegesAr = arKalkulator($row['ar'], $row['ritkasag']);
     ?>
         <div class="card tier-<?php echo $row['ritkasag']; ?>" 
@@ -151,18 +151,18 @@ function arKalkulator($alapAr, $ritkasag) {
 </div>
 
 <script>
-    // Szűrőpanel ki/bekapcsolása
+  
     function toggleFilter() {
         document.getElementById('filterPanel').classList.toggle('active');
     }
     
-    // Ár csúszka értékének frissítése
+ 
     function updatePrice(val) {
         document.getElementById('priceVal').innerText = val;
         filterItems();
     }
 
-    // Dinamikus JS szűrés
+  
     function filterItems() {
         let nameInput = document.getElementById('searchBar').value.toLowerCase();
         let typeInput = document.getElementById('filterType').value;
@@ -175,12 +175,12 @@ function arKalkulator($alapAr, $ritkasag) {
             let type = card.getAttribute('data-type');
             let price = parseInt(card.getAttribute('data-price'));
 
-            // Feltételek
+     
             let matchesName = name.includes(nameInput);
             let matchesType = (typeInput === "all" || type === typeInput);
             let matchesPrice = (price <= priceInput);
 
-            // Megjelenítés vagy elrejtés
+         
             if (matchesName && matchesType && matchesPrice) {
                 card.style.display = "block";
             } else {
