@@ -38,8 +38,8 @@
             <option value="all">Összes típus</option>
             <option value="Kártya">Kártya</option>
             <option value="Könyv">Könyv</option>
-            <option value="Könyv">Képregény</option>
-            <option value="Könyv">Figura</option>
+            <option value="Képregény">Képregény</option>
+            <option value="Figura">Figura</option>
         </select>
 
         <label>Max ár: <span id="priceVal">50000</span> Ft</label>
@@ -105,3 +105,4 @@ function filterItems() {
 </script>
 </body>
 </html>
+
